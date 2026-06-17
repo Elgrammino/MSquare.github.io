@@ -41,14 +41,15 @@ h1 {
 .card {
   position: relative;
 
-  padding: 28px;
-  border-radius: 36px;
+  padding: 24px;
+  border-radius: 32px;
 
   background:
-    rgba(28, 28, 30, .55);
+    rgba(28, 28, 30, 0.55);
 
   border:
-    1px solid rgba(255,255,255,.08);
+    1px solid
+    rgba(255,255,255,.08);
 
   backdrop-filter:
     blur(30px)
