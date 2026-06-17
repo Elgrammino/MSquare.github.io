@@ -95,14 +95,29 @@ function animateValue(el, value) {
   }, 250);
 }
 
-function handLine(ctx, x1, y1, x2, y2) {
-  const pieces = 28;
+function handLine(
+  ctx,
+  x1,
+  y1,
+  x2,
+  y2
+) {
+  const pieces = 16;
 
   ctx.beginPath();
   ctx.moveTo(x1, y1);
 
-  for (let i = 1; i <= pieces; i++) {
+  for (
+    let i = 1;
+    i <= pieces;
+    i++
+  ) {
     const t = i / pieces;
+
+    const curve =
+      Math.sin(
+        t * Math.PI
+      ) * 8;
 
     const nx =
       x1 +
@@ -112,14 +127,11 @@ function handLine(ctx, x1, y1, x2, y2) {
       y1 +
       (y2 - y1) * t;
 
-    const wave =
-      Math.sin(t * Math.PI * 2) * 8;
-
     const dx =
-      Math.random() * 10 - 5;
+      (Math.random() * 10 - 5);
 
     const dy =
-      Math.random() * 10 - 5;
+      (Math.random() * 10 - 5);
 
     if (
       Math.abs(x2 - x1) >
@@ -127,11 +139,11 @@ function handLine(ctx, x1, y1, x2, y2) {
     ) {
       ctx.lineTo(
         nx + dx,
-        ny + dy + wave
+        ny + dy + curve
       );
     } else {
       ctx.lineTo(
-        nx + dx + wave,
+        nx + dx + curve,
         ny + dy
       );
     }
