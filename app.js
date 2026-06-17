@@ -95,24 +95,14 @@ function animateValue(el, value) {
   }, 250);
 }
 
-function handLine(
-  ctx,
-  x1,
-  y1,
-  x2,
-  y2
-) {
-  const parts = 20;
+function handLine(ctx, x1, y1, x2, y2) {
+  const pieces = 28;
 
   ctx.beginPath();
   ctx.moveTo(x1, y1);
 
-  for (
-    let i = 1;
-    i <= parts;
-    i++
-  ) {
-    const t = i / parts;
+  for (let i = 1; i <= pieces; i++) {
+    const t = i / pieces;
 
     const nx =
       x1 +
@@ -122,16 +112,14 @@ function handLine(
       y1 +
       (y2 - y1) * t;
 
-    const bend =
-      Math.sin(
-        t * Math.PI
-      ) * 10;
+    const wave =
+      Math.sin(t * Math.PI * 2) * 8;
 
     const dx =
-      Math.random() * 14 - 7;
+      Math.random() * 10 - 5;
 
     const dy =
-      Math.random() * 14 - 7;
+      Math.random() * 10 - 5;
 
     if (
       Math.abs(x2 - x1) >
@@ -139,11 +127,11 @@ function handLine(
     ) {
       ctx.lineTo(
         nx + dx,
-        ny + dy + bend
+        ny + dy + wave
       );
     } else {
       ctx.lineTo(
-        nx + dx + bend,
+        nx + dx + wave,
         ny + dy
       );
     }
@@ -182,16 +170,16 @@ function drawImage(matrix) {
     180
   );
 
-  const x = 260;
+  const x = 250;
   const y = 350;
-  const s = 220;
+  const s = 230;
 
   c.lineCap = "round";
   c.lineJoin = "round";
 
   for (
     let pass = 0;
-    pass < 2;
+    pass < 3;
     pass++
   ) {
     c.lineWidth =
@@ -238,20 +226,34 @@ function drawImage(matrix) {
       const dy =
         Math.random() * 8 - 4;
 
-      c.fillText(
-        String(n),
-        x +
-          col * s +
-          s / 2 +
-          dx,
-        y +
-          row * s +
-          s / 2 +
-          30 +
-          dy
-      );
-    }
-  );
+      c.save();
+
+c.translate(
+  x +
+    col * s +
+    s / 2 +
+    dx,
+
+  y +
+    row * s +
+    s / 2 +
+    30 +
+    dy
+);
+
+c.rotate(
+  (Math.random() * 8 - 4) *
+  Math.PI /
+  180
+);
+
+c.fillText(
+  String(n),
+  0,
+  0
+);
+
+c.restore();
 
   preview.src =
     canvas.toDataURL(
