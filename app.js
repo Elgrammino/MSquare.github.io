@@ -102,22 +102,17 @@ function handLine(
   x2,
   y2
 ) {
-  const pieces = 16;
+  const parts = 20;
 
   ctx.beginPath();
   ctx.moveTo(x1, y1);
 
   for (
     let i = 1;
-    i <= pieces;
+    i <= parts;
     i++
   ) {
-    const t = i / pieces;
-
-    const curve =
-      Math.sin(
-        t * Math.PI
-      ) * 8;
+    const t = i / parts;
 
     const nx =
       x1 +
@@ -127,11 +122,16 @@ function handLine(
       y1 +
       (y2 - y1) * t;
 
+    const bend =
+      Math.sin(
+        t * Math.PI
+      ) * 10;
+
     const dx =
-      (Math.random() * 10 - 5);
+      Math.random() * 14 - 7;
 
     const dy =
-      (Math.random() * 10 - 5);
+      Math.random() * 14 - 7;
 
     if (
       Math.abs(x2 - x1) >
@@ -139,11 +139,11 @@ function handLine(
     ) {
       ctx.lineTo(
         nx + dx,
-        ny + dy + curve
+        ny + dy + bend
       );
     } else {
       ctx.lineTo(
-        nx + dx + curve,
+        nx + dx + bend,
         ny + dy
       );
     }
@@ -182,16 +182,16 @@ function drawImage(matrix) {
     180
   );
 
-  const x = 250;
+  const x = 260;
   const y = 350;
-  const s = 230;
+  const s = 220;
 
   c.lineCap = "round";
   c.lineJoin = "round";
 
   for (
     let pass = 0;
-    pass < 3;
+    pass < 2;
     pass++
   ) {
     c.lineWidth =
@@ -238,34 +238,20 @@ function drawImage(matrix) {
       const dy =
         Math.random() * 8 - 4;
 
-      c.save();
-
-c.translate(
-  x +
-    col * s +
-    s / 2 +
-    dx,
-
-  y +
-    row * s +
-    s / 2 +
-    30 +
-    dy
-);
-
-c.rotate(
-  (Math.random() * 8 - 4) *
-  Math.PI /
-  180
-);
-
-c.fillText(
-  String(n),
-  0,
-  0
-);
-
-c.restore();
+      c.fillText(
+        String(n),
+        x +
+          col * s +
+          s / 2 +
+          dx,
+        y +
+          row * s +
+          s / 2 +
+          30 +
+          dy
+      );
+    }
+  );
 
   preview.src =
     canvas.toDataURL(
