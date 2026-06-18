@@ -1,6 +1,7 @@
 const grid = document.getElementById("grid");
 const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
+const imageBtn = document.getElementById("imageBtn");
 
 const cells = [];
 
@@ -18,8 +19,8 @@ for (let i = 0; i < 16; i++) {
     cell.appendChild(input);
     cells.push(input);
   } else {
-    const span = document.createElement("span");
-    span.textContent = "";
+    const span =
+      document.createElement("span");
 
     cell.appendChild(span);
     cells.push(span);
@@ -30,11 +31,20 @@ for (let i = 0; i < 16; i++) {
 
 const inputs = cells.slice(12);
 
-function getNumber(value) {
-  value = parseInt(value, 10);
+const canvas =
+  document.createElement("canvas");
 
-  return Number.isFinite(value)
-    ? value
+canvas.width = 1000;
+canvas.height = 1300;
+
+const c =
+  canvas.getContext("2d");
+
+function getNumber(v) {
+  v = parseInt(v, 10);
+
+  return Number.isFinite(v)
+    ? v
     : 0;
 }
 
@@ -42,17 +52,17 @@ function sanitize(input) {
   let value =
     input.value.replace(/\D/g, "");
 
-  if (value) {
-    value = parseInt(value);
+  if (!value) return;
 
-    value =
-      Math.max(
-        1,
-        Math.min(100, value)
-      );
+  value = Math.max(
+    1,
+    Math.min(
+      100,
+      parseInt(value)
+    )
+  );
 
-    input.value = value;
-  }
+  input.value = value;
 }
 
 function animateValue(el, value) {
@@ -96,23 +106,22 @@ function animateValue(el, value) {
 }
 
 function handLine(
-  ctx,
   x1,
   y1,
   x2,
   y2
 ) {
-  const parts = 20;
+  const pieces = 18;
 
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
+  c.beginPath();
+  c.moveTo(x1, y1);
 
   for (
     let i = 1;
-    i <= parts;
+    i <= pieces;
     i++
   ) {
-    const t = i / parts;
+    const t = i / pieces;
 
     const nx =
       x1 +
@@ -122,145 +131,22 @@ function handLine(
       y1 +
       (y2 - y1) * t;
 
-    const bend =
-      Math.sin(
-        t * Math.PI
-      ) * 10;
-
     const dx =
-      Math.random() * 14 - 7;
+      Math.random() * 8 - 4;
 
     const dy =
-      Math.random() * 14 - 7;
+      Math.random() * 8 - 4;
 
-    if (
-      Math.abs(x2 - x1) >
-      Math.abs(y2 - y1)
-    ) {
-      ctx.lineTo(
-        nx + dx,
-        ny + dy + bend
-      );
-    } else {
-      ctx.lineTo(
-        nx + dx + bend,
-        ny + dy
-      );
-    }
-  }
-
-  ctx.stroke();
-}
-
-function drawImage(matrix) {
-  const canvas =
-    document.createElement("canvas");
-
-  canvas.width = 1400;
-  canvas.height = 1800;
-
-  const c =
-    canvas.getContext("2d");
-
-  c.fillStyle = "#fff";
-  c.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  c.fillStyle = "#000";
-  c.textAlign = "center";
-
-  c.font =
-    "bold 110px Caveat";
-
-  c.fillText(
-    "Магический квадрат",
-    canvas.width / 2,
-    180
-  );
-
-  const x = 260;
-  const y = 350;
-  const s = 220;
-
-  c.lineCap = "round";
-  c.lineJoin = "round";
-
-  for (
-    let pass = 0;
-    pass < 2;
-    pass++
-  ) {
-    c.lineWidth =
-      5 +
-      Math.random() * 3;
-
-    for (
-      let i = 0;
-      i <= 4;
-      i++
-    ) {
-      handLine(
-        c,
-        x + i * s,
-        y,
-        x + i * s,
-        y + s * 4
-      );
-
-      handLine(
-        c,
-        x,
-        y + i * s,
-        x + s * 4,
-        y + i * s
-      );
-    }
-  }
-
-  c.font =
-    "78px Caveat";
-
-  matrix.flat().forEach(
-    (n, i) => {
-      const row =
-        Math.floor(i / 4);
-
-      const col =
-        i % 4;
-
-      const dx =
-        Math.random() * 8 - 4;
-
-      const dy =
-        Math.random() * 8 - 4;
-
-      c.fillText(
-        String(n),
-        x +
-          col * s +
-          s / 2 +
-          dx,
-        y +
-          row * s +
-          s / 2 +
-          30 +
-          dy
-      );
-    }
-  );
-
-  preview.src =
-    canvas.toDataURL(
-      "image/jpeg",
-      0.95
+    c.lineTo(
+      nx + dx,
+      ny + dy
     );
+  }
+
+  c.stroke();
 }
 
-function update() {
+function getMatrix() {
   const A =
     getNumber(inputs[0].value);
 
@@ -273,12 +159,122 @@ function update() {
   const D =
     getNumber(inputs[3].value);
 
-  const matrix = [
+  return [
     [B + 1, A + 3, D - 3, C - 1],
     [D - 2, C - 2, B + 2, A + 2],
     [C + 1, D - 1, A + 1, B - 1],
     [A, B, C, D]
   ];
+}
+
+function drawImage() {
+  const matrix =
+    getMatrix();
+
+  c.fillStyle = "#fff";
+  c.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const x = 140;
+  const y = 220;
+  const s = 180;
+
+  c.strokeStyle = "#000";
+  c.lineCap = "round";
+  c.lineJoin = "round";
+
+  for (
+    let p = 0;
+    p < 2;
+    p++
+  ) {
+    c.lineWidth =
+      5 +
+      Math.random() * 3;
+
+    for (
+      let i = 0;
+      i <= 4;
+      i++
+    ) {
+      handLine(
+        x + i * s,
+        y,
+        x + i * s,
+        y + s * 4
+      );
+
+      handLine(
+        x,
+        y + i * s,
+        x + s * 4,
+        y + i * s
+      );
+    }
+  }
+
+  c.fillStyle = "#000";
+  c.textAlign = "center";
+  c.textBaseline =
+    "middle";
+
+  c.font =
+    "70px Caveat";
+
+  matrix.flat().forEach(
+    (n, i) => {
+      const row =
+        Math.floor(i / 4);
+
+      const col =
+        i % 4;
+
+      c.save();
+
+      c.translate(
+        x +
+          col * s +
+          s / 2 +
+          (Math.random() * 10 - 5),
+
+        y +
+          row * s +
+          s / 2 +
+          (Math.random() * 10 - 5)
+      );
+
+      c.rotate(
+        (Math.random() * 8 - 4) *
+        Math.PI /
+        180
+      );
+
+      c.fillText(
+        String(n),
+        0,
+        0
+      );
+
+      c.restore();
+    }
+  );
+
+  preview.src =
+    canvas.toDataURL(
+      "image/jpeg",
+      0.92
+    );
+
+  preview.hidden = false;
+}
+
+function update() {
+  const matrix =
+    getMatrix();
 
   let i = 0;
 
@@ -301,10 +297,13 @@ function update() {
     }
   }
 
-  sumEl.textContent =
-    A + B + C + D;
+  const sum =
+    matrix[3][0] +
+    matrix[3][1] +
+    matrix[3][2] +
+    matrix[3][3];
 
-  drawImage(matrix);
+  sumEl.textContent = sum;
 }
 
 inputs.forEach(
@@ -353,9 +352,17 @@ document
           (input.value = "")
       );
 
+      preview.hidden = true;
+
       inputs[0].focus();
+
       update();
     }
   );
+
+imageBtn.addEventListener(
+  "click",
+  drawImage
+);
 
 update();
