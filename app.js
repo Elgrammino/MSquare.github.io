@@ -52,14 +52,16 @@ function sanitize(input) {
   let value =
     input.value.replace(/\D/g, "");
 
-  if (!value) return;
+  if (value === "") {
+    input.value = "";
+    return;
+  }
+
+  value = parseInt(value, 10);
 
   value = Math.max(
-    1,
-    Math.min(
-      100,
-      parseInt(value)
-    )
+    0,
+    Math.min(100, value)
   );
 
   input.value = value;
