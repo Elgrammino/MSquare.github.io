@@ -1,6 +1,6 @@
 {
-  "name": "MSquare",
-  "short_name": "MSquare",
+  "name": "Магический квадрат",
+  "short_name": "Квадрат",
   "start_url": "/MSquare.github.io/",
   "scope": "/MSquare.github.io/",
   "display": "standalone",
@@ -11,6 +11,11 @@
     {
       "src": "/MSquare.github.io/apple-touch-icon.png",
       "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/MSquare.github.io/apple-touch-icon.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
