@@ -201,3 +201,26 @@ imageBtn.addEventListener("click", drawImage);
 /* ---------- IOS-INSTANT START ---------- */
 
 requestAnimationFrame(update);
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      const registration =
+        await navigator.serviceWorker.register(
+          "/MSquare.github.io/sw.js",
+          {
+            scope: "/MSquare.github.io/"
+          }
+        );
+
+      registration.update();
+
+      setInterval(() => {
+        registration.update();
+      }, 60000);
+
+    } catch (e) {
+      console.error("SW error:", e);
+    }
+  });
+}
+
