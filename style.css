@@ -169,42 +169,6 @@ button:active {
   background: #fff;
 }
 
-.digit {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  transform:
-    translate(-50%, -50%);
-
-  transition:
-    transform .25s cubic-bezier(.22,.8,.36,1),
-    opacity .25s ease;
-}
-
-.old {
-  opacity: 1;
-}
-
-.next {
-  opacity: 0;
-  transform:
-    translate(-50%, -180%);
-}
-
-.old.hide {
-  opacity: 0;
-  transform:
-    translate(-50%, 180%);
-}
-
-.next.show {
-  opacity: 1;
-  transform:
-    translate(-50%, -50%);
-}
-
 @media (max-height: 760px) {
 
   .grid {
