@@ -214,13 +214,6 @@ if ("serviceWorker" in navigator) {
             scope: "/MSquare.github.io/"
           }
         );
-
-      registration.update();
-
-      setInterval(() => {
-        registration.update();
-      }, 60000);
-
     } catch (e) {
       console.error("SW error:", e);
     }
