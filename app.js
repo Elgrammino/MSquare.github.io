@@ -128,7 +128,8 @@ inputs.forEach((input, i) => {
 }
 
 scheduleUpdate();
-
+});
+  
   input.addEventListener("keydown", (e) => {
     if (e.key === "Backspace" && !input.value) {
       inputs[i - 1]?.focus();
