@@ -3,6 +3,12 @@ const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
 
+const sumInput = sumEl;
+
+const modeSwitch = document.getElementById("modeSwitch");
+
+let birthMode = true; // true = ДР, false = Сумма
+
 const cells = [];
 const inputs = [];
 
@@ -72,16 +78,28 @@ function scheduleUpdate() {
 /* ---------- MATRIX ---------- */
 
 function getMatrix() {
-  const A = getNumber(inputs[0].value);
-  const B = getNumber(inputs[1].value);
-  const C = getNumber(inputs[2].value);
-  const D = getNumber(inputs[3].value);
+  if (birthMode) {
+    const A = getNumber(inputs[0].value);
+    const B = getNumber(inputs[1].value);
+    const C = getNumber(inputs[2].value);
+    const D = getNumber(inputs[3].value);
+
+    return [
+      [B + 1, A + 3, D - 3, C - 1],
+      [D - 2, C - 2, B + 2, A + 2],
+      [C + 1, D - 1, A + 1, B - 1],
+      [A, B, C, D]
+    ];
+  }
+
+  const sum = clamp(getNumber(sumEl.textContent || sumEl.value), 20, 999);
+  const n = sum - 20;
 
   return [
-    [B + 1, A + 3, D - 3, C - 1],
-    [D - 2, C - 2, B + 2, A + 2],
-    [C + 1, D - 1, A + 1, B - 1],
-    [A, B, C, D]
+    [8, 11, n, 1],
+    [n - 1, 2, 7, 12],
+    [3, n + 2, 9, 6],
+    [10, 5, 4, n + 1]
   ];
 }
 
