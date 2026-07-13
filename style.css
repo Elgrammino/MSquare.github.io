@@ -35,7 +35,7 @@ body {
   border-radius: 36px;
 
   background:
-    rgba(28,28,30,.55);
+    rgba(28, 28, 30, .55);
 
   border:
     1px solid rgba(255,255,255,.08);
@@ -73,186 +73,78 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4,82px);
-  gap:12px;
+  grid-template-columns:
+    repeat(4, 82px);
+
+  gap: 12px;
 }
 
 .cell {
-  width:82px;
-  height:82px;
+  width: 82px;
+  height: 82px;
 
-  background:rgba(44,44,46,.9);
+  background:
+    rgba(44,44,46,.9);
 
-  border-radius:24px;
+  border-radius: 24px;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
 
-  font-size:34px;
-  font-weight:600;
+  font-size: 34px;
+  font-weight: 600;
 }
 
-/* Только поля квадрата */
+input {
+  width: 100%;
+  height: 100%;
 
-.cell input {
+  border: none;
+  outline: none;
+  background: transparent;
 
-  width:100%;
-  height:100%;
+  color: #fff;
 
-  border:none;
-  outline:none;
+  text-align: center;
 
-  background:transparent;
-
-  color:#fff;
-
-  text-align:center;
-
-  font-size:34px;
-  font-weight:600;
+  font-size: 34px;
+  font-weight: 600;
 }
 
-.sum-box{
-
-  margin-top:26px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.sum-box {
+  margin-top: 26px;
+  text-align: center;
 }
 
-.sum-label{
-
-  color:#8e8e93;
-  font-size:15px;
+.sum-label {
+  color: #8e8e93;
+  font-size: 15px;
 }
 
-/* Поле суммы */
-
-.sum-value{
-
-  width:140px;
-
-  margin-top:8px;
-
-  border:none;
-  outline:none;
-
-  background:transparent;
-
-  color:#fff;
-
-  text-align:center;
-
-  font-size:44px;
-  font-weight:700;
-
-  font-family:inherit;
+.sum-value {
+  margin-top: 8px;
+  font-size: 44px;
+  font-weight: 700;
 }
 
-.sum-value:read-only{
+button {
+  width: 210px;
+  height: 56px;
 
-  cursor:default;
-}
+  border: none;
+  border-radius: 28px;
 
-.sum-value:not(:read-only){
+  background: #34C759;
+  color: #fff;
 
-  border-bottom:2px solid #34C759;
-}
+  font-size: 17px;
+  font-weight: 600;
 
-/* ---------- SWITCH ---------- */
-
-.switch-wrap{
-
-  margin-top:24px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  gap:12px;
-}
-
-.switch{
-
-  position:relative;
-
-  width:52px;
-  height:32px;
-
-  border:none;
-  padding:0;
-
-  border-radius:999px;
-
-  background:#39393d;
-
-  cursor:pointer;
-
-  transition:background .25s ease;
-}
-
-.switch.active{
-
-  background:#34C759;
-}
-
-.switch-knob{
-
-  position:absolute;
-
-  top:2px;
-  left:2px;
-
-  width:28px;
-  height:28px;
-
-  border-radius:50%;
-
-  background:#fff;
-
-  box-shadow:
-    0 2px 6px rgba(0,0,0,.25);
-
-  transition:
-    transform .25s cubic-bezier(.22,.8,.36,1);
-}
-
-.switch.active .switch-knob{
-
-  transform:translateX(20px);
-}
-
-.switch-text{
-
-  color:#fff;
-
-  font-size:16px;
-  font-weight:500;
-}
-
-/* Кнопки */
-
-button{
-
-  width:210px;
-  height:56px;
-
-  border:none;
-  border-radius:28px;
-
-  background:#34C759;
-
-  color:#fff;
-
-  font-size:17px;
-  font-weight:600;
-
-  margin-top:18px;
+  margin-top: 18px;
 
   box-shadow:
     0 10px 30px rgba(52,199,89,.25);
@@ -262,47 +154,35 @@ button{
     filter .12s ease;
 }
 
-button:active{
-
-  transform:scale(.96);
-
-  filter:brightness(.92);
+button:active {
+  transform: scale(.96);
+  filter: brightness(.92);
 }
 
-#preview{
+#preview {
+  width: min(92vw, 430px);
 
-  width:min(92vw,430px);
+  margin-top:
+    max(420px, 60vh);
 
-  margin-top:max(420px,60vh);
-
-  border-radius:24px;
-
-  background:#fff;
+  border-radius: 24px;
+  background: #fff;
 }
 
-@media (max-height:760px){
+@media (max-height: 760px) {
 
-  .grid{
-
-    grid-template-columns:repeat(4,74px);
+  .grid {
+    grid-template-columns:
+      repeat(4, 74px);
   }
 
-  .cell{
-
-    width:74px;
-    height:74px;
-
-    font-size:30px;
+  .cell {
+    width: 74px;
+    height: 74px;
+    font-size: 30px;
   }
 
-  .cell input{
-
-    font-size:30px;
+  input {
+    font-size: 30px;
   }
-
-  .sum-value{
-
-    font-size:38px;
-  }
-
 }
