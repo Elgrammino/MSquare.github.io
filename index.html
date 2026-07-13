@@ -31,19 +31,44 @@ content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=
 
   <div class="sum-box">
     <div class="sum-label">Сумма</div>
-    <div id="sum" class="sum-value">0</div>
-  </div>
-<!-- SWITCH -->
-<div class="switch-wrap">
-  <div id="modeSwitch" class="switch">
-    <div class="knob"></div>
-  </div>
-  <div class="switch-label">Дата Рождения</div>
-</div>
-  
-  <button id="clearBtn">Очистить</button>
 
-  <button id="imageBtn">Картинка</button>
+    <!-- Теперь сумма является input -->
+    <input
+      id="sum"
+      class="sum-value"
+      type="text"
+      inputmode="numeric"
+      maxlength="3"
+      value="0"
+      readonly>
+  </div>
+
+  <!-- Переключатель режима -->
+  <div class="switch-wrap">
+
+    <button
+      id="modeSwitch"
+      class="switch active"
+      type="button"
+      aria-label="Дата рождения">
+
+      <span class="switch-knob"></span>
+
+    </button>
+
+    <span class="switch-text">
+      Дата Рождения
+    </span>
+
+  </div>
+
+  <button id="clearBtn">
+    Очистить
+  </button>
+
+  <button id="imageBtn">
+    Картинка
+  </button>
 
   <img id="preview" alt="Квадрат" hidden>
 
