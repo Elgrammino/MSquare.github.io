@@ -3,12 +3,6 @@ const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
 
-const sumInput = sumEl;
-
-const modeSwitch = document.getElementById("modeSwitch");
-
-let birthMode = true; // true = ДР, false = Сумма
-
 const cells = [];
 const inputs = [];
 
@@ -78,28 +72,16 @@ function scheduleUpdate() {
 /* ---------- MATRIX ---------- */
 
 function getMatrix() {
-  if (birthMode) {
-    const A = getNumber(inputs[0].value);
-    const B = getNumber(inputs[1].value);
-    const C = getNumber(inputs[2].value);
-    const D = getNumber(inputs[3].value);
-
-    return [
-      [B + 1, A + 3, D - 3, C - 1],
-      [D - 2, C - 2, B + 2, A + 2],
-      [C + 1, D - 1, A + 1, B - 1],
-      [A, B, C, D]
-    ];
-  }
-
-  const sum = clamp(getNumber(sumEl.textContent || sumEl.value), 20, 999);
-  const n = sum - 20;
+  const A = getNumber(inputs[0].value);
+  const B = getNumber(inputs[1].value);
+  const C = getNumber(inputs[2].value);
+  const D = getNumber(inputs[3].value);
 
   return [
-    [8, 11, n, 1],
-    [n - 1, 2, 7, 12],
-    [3, n + 2, 9, 6],
-    [10, 5, 4, n + 1]
+    [B + 1, A + 3, D - 3, C - 1],
+    [D - 2, C - 2, B + 2, A + 2],
+    [C + 1, D - 1, A + 1, B - 1],
+    [A, B, C, D]
   ];
 }
 
@@ -127,7 +109,6 @@ function update() {
     }
   }
 
- if (birthMode) {
   sumEl.textContent =
     m[3][0] + m[3][1] + m[3][2] + m[3][3];
 }
@@ -147,8 +128,7 @@ inputs.forEach((input, i) => {
 }
 
 scheduleUpdate();
-});
-  
+
   input.addEventListener("keydown", (e) => {
     if (e.key === "Backspace" && !input.value) {
       inputs[i - 1]?.focus();
@@ -234,27 +214,15 @@ if ("serviceWorker" in navigator) {
             scope: "/MSquare.github.io/"
           }
         );
+
+      registration.update();
+
+      setInterval(() => {
+        registration.update();
+      }, 60000);
+
     } catch (e) {
       console.error("SW error:", e);
     }
   });
 }
-modeSwitch.addEventListener("click", () => {
-  birthMode = !birthMode;
-
-  modeSwitch.classList.toggle("active");
-
-  if (birthMode) {
-    // режим ДР
-    sumEl.setAttribute("readonly", true);
-    inputs.forEach(i => i.disabled = false);
-  } else {
-    // режим суммы
-    sumEl.removeAttribute("readonly");
-    inputs.forEach(i => i.disabled = true);
-  }
-
-  scheduleUpdate();
-});
-  sumEl.setAttribute("readonly", true);
-modeSwitch.classList.add("active");
