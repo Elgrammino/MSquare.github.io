@@ -186,3 +186,46 @@ button:active {
     font-size: 30px;
   }
 }
+/* ---------- SWITCH (iOS STYLE) ---------- */
+
+.switch-wrap {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch {
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  background: #2c2c2e;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.switch .knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.switch.active {
+  background: #34C759;
+}
+
+.switch.active .knob {
+  transform: translateX(22px);
+  background: #fff;
+}
+
+.switch-label {
+  font-size: 16px;
+  color: #fff;
+  opacity: 0.9;
+}
