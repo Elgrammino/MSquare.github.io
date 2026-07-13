@@ -1,4 +1,4 @@
-onst grid = document.getElementById("grid");
+const grid = document.getElementById("grid");
 const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
