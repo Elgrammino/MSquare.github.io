@@ -127,6 +127,7 @@ function update() {
     }
   }
 
+ if (birthMode) {
   sumEl.textContent =
     m[3][0] + m[3][1] + m[3][2] + m[3][3];
 }
@@ -238,4 +239,22 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+modeSwitch.addEventListener("click", () => {
+  birthMode = !birthMode;
 
+  modeSwitch.classList.toggle("active");
+
+  if (birthMode) {
+    // режим ДР
+    sumEl.setAttribute("readonly", true);
+    inputs.forEach(i => i.disabled = false);
+  } else {
+    // режим суммы
+    sumEl.removeAttribute("readonly");
+    inputs.forEach(i => i.disabled = true);
+  }
+
+  scheduleUpdate();
+});
+  sumEl.setAttribute("readonly", true);
+modeSwitch.classList.add("active");
