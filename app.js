@@ -2,6 +2,9 @@ const grid = document.getElementById("grid");
 const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
+const modeSwitch = document.getElementById("modeSwitch");
+
+let birthdayMode = false;
 
 const cells = [];
 const inputs = [];
@@ -45,6 +48,7 @@ function getNumber(v) {
 
 function sanitize(input) {
   let v = input.value.replace(/\D/g, "");
+
   if (!v) {
     input.value = "";
     return;
@@ -53,13 +57,14 @@ function sanitize(input) {
   input.value = String(clamp(parseInt(v, 10), 0, 100));
 }
 
-/* ---------- IOS-STYLE HAPTIC FEEL (soft render batching) ---------- */
+/* ---------- IOS-STYLE HAPTIC FEEL ---------- */
 
 let rafPending = false;
 let renderedOnce = false;
 
 function scheduleUpdate() {
   if (rafPending) return;
+
   rafPending = true;
 
   requestAnimationFrame(() => {
@@ -72,6 +77,19 @@ function scheduleUpdate() {
 /* ---------- MATRIX ---------- */
 
 function getMatrix() {
+
+  if (birthdayMode) {
+
+    const n = getNumber(sumEl.textContent);
+
+    return [
+      [8, 11, n, 1],
+      [n - 1, 2, 7, 12],
+      [3, n + 2, 9, 6],
+      [10, 5, 4, n + 1]
+    ];
+  }
+
   const A = getNumber(inputs[0].value);
   const B = getNumber(inputs[1].value);
   const C = getNumber(inputs[2].value);
@@ -85,138 +103,216 @@ function getMatrix() {
   ];
 }
 
-/* ---------- UPDATE (SMOOTH IOS FEEL) ---------- */
+/* ---------- UPDATE ---------- */
 
 function update() {
+
   const m = getMatrix();
+
+  sumEl.contentEditable = birthdayMode;
 
   let i = 0;
 
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 4; c++) {
+
       const el = cells[i];
       const val = m[r][c];
 
       if (!renderedOnce) {
         el.textContent = val;
-      } else {
-        if (el.textContent !== String(val)) {
-          el.textContent = val;
-        }
+      } else if (el.textContent !== String(val)) {
+        el.textContent = val;
       }
 
       i++;
     }
   }
 
-  sumEl.textContent =
-    m[3][0] + m[3][1] + m[3][2] + m[3][3];
-}
-
-/* ---------- INPUTS (IOS-STYLE INPUT FLOW) ---------- */
-
-inputs.forEach((input, i) => {
-  input.addEventListener("input", () => {
-    sanitize(input);
-
-    if (input.value.length >= 2) {
-  if (i < inputs.length - 1) {
-    inputs[i + 1].focus();
-  } else {
-    input.blur();
+  if (!birthdayMode) {
+    sumEl.textContent =
+      m[3][0] +
+      m[3][1] +
+      m[3][2] +
+      m[3][3];
   }
+
 }
 
-scheduleUpdate();
-});
-  
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Backspace" && !input.value) {
-      inputs[i - 1]?.focus();
+/* ---------- MODE ---------- */
+
+function setMode(on) {
+
+  birthdayMode = !on;
+
+  inputs.forEach(input => {
+    input.disabled = birthdayMode;
+
+    if (birthdayMode) {
+      input.value = "";
     }
   });
 
-  /* iOS-like blur soft update */
-  input.addEventListener("blur", scheduleUpdate);
-});
+  if (birthdayMode) {
+    sumEl.textContent = "0";
+  }
 
-/* ---------- CLEAR (SOFT RESET FEEL) ---------- */
+  scheduleUpdate();
+}
 
-document.getElementById("clearBtn")
-  .addEventListener("click", () => {
-    inputs.forEach(i => (i.value = ""));
-    preview.hidden = true;
-    inputs[0].focus();
+/* ---------- INPUTS (IOS-STYLE INPUT FLOW) ---------- */
+inputs.forEach((input, i) => {
+
+  input.addEventListener("input", () => {
+
+    sanitize(input);
+
+    if (input.value.length >= 2) {
+
+      if (i < inputs.length - 1) {
+        inputs[i + 1].focus();
+      } else {
+        input.blur();
+      }
+
+    }
 
     scheduleUpdate();
+
   });
 
-/* ---------- IMAGE (LAZY INIT) ---------- */
+  input.addEventListener("keydown", (e) => {
 
-let canvas, ctx;
+    if (e.key === "Backspace" && !input.value) {
+      inputs[i - 1]?.focus();
+    }
+
+  });
+
+  input.addEventListener("blur", scheduleUpdate);
+
+});
+
+/* ---------- CLEAR ---------- */
+
+document.getElementById("clearBtn")
+.addEventListener("click", () => {
+
+  inputs.forEach(input => input.value = "");
+
+  if (birthdayMode) {
+    sumEl.textContent = "0";
+  }
+
+  preview.hidden = true;
+
+  if (!birthdayMode) {
+    inputs[0].focus();
+  }
+
+  scheduleUpdate();
+
+});
+
+/* ---------- IMAGE ---------- */
+
+let canvas;
+let ctx;
 
 function getCanvas() {
+
   if (canvas) return canvas;
 
   canvas = document.createElement("canvas");
   canvas.width = 900;
   canvas.height = 1200;
+
   ctx = canvas.getContext("2d");
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   return canvas;
+
 }
 
 function drawImage() {
+
   const m = getMatrix();
+
   getCanvas();
 
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const x = 120;
   const y = 180;
   const s = 160;
 
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#000000";
   ctx.font = "60px Caveat";
 
-  m.flat().forEach((n, i) => {
-    const r = Math.floor(i / 4);
-    const c = i % 4;
+  m.flat().forEach((number, index) => {
+
+    const row = Math.floor(index / 4);
+    const col = index % 4;
 
     ctx.fillText(
-      String(n),
-      x + c * s + s / 2,
-      y + r * s + s / 2
+      String(number),
+      x + col * s + s / 2,
+      y + row * s + s / 2
     );
+
   });
 
   preview.src = canvas.toDataURL("image/jpeg", 0.9);
   preview.hidden = false;
+
 }
 
-/* ---------- BUTTON ---------- */
+/* ---------- BUTTONS ---------- */
 
 imageBtn.addEventListener("click", drawImage);
 
-/* ---------- IOS-INSTANT START ---------- */
+modeSwitch.addEventListener("change", () => {
+
+  setMode(modeSwitch.checked);
+
+});
+
+sumEl.addEventListener("input", () => {
+
+  if (!birthdayMode) return;
+
+  sumEl.textContent = sumEl.textContent.replace(/\D/g, "");
+
+  scheduleUpdate();
+
+});
+
+/* ---------- START ---------- */
 
 requestAnimationFrame(update);
+
 if ("serviceWorker" in navigator) {
+
   window.addEventListener("load", async () => {
+
     try {
-      const registration =
-        await navigator.serviceWorker.register(
-          "/MSquare.github.io/sw.js",
-          {
-            scope: "/MSquare.github.io/"
-          }
-        );
+
+      await navigator.serviceWorker.register(
+        "/MSquare.github.io/sw.js",
+        {
+          scope: "/MSquare.github.io/"
+        }
+      );
+
     } catch (e) {
+
       console.error("SW error:", e);
+
     }
+
   });
+
 }
