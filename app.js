@@ -1,4 +1,4 @@
-const grid = document.getElementById("grid");
+onst grid = document.getElementById("grid");
 const sumEl = document.getElementById("sum");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
@@ -128,7 +128,8 @@ inputs.forEach((input, i) => {
 }
 
 scheduleUpdate();
-
+});
+  
   input.addEventListener("keydown", (e) => {
     if (e.key === "Backspace" && !input.value) {
       inputs[i - 1]?.focus();
@@ -214,13 +215,6 @@ if ("serviceWorker" in navigator) {
             scope: "/MSquare.github.io/"
           }
         );
-
-      registration.update();
-
-      setInterval(() => {
-        registration.update();
-      }, 60000);
-
     } catch (e) {
       console.error("SW error:", e);
     }
