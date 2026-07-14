@@ -6,8 +6,6 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 
-<meta name="theme-color" content="#121212">
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Квадрат">
@@ -17,6 +15,11 @@ content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
 <title>Магический квадрат</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -30,52 +33,19 @@ content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=
   </div>
 
   <div class="sum-box">
+    <div class="sum-label">Сумма</div>
+    <div id="sum" class="sum-value">0</div>
+  </div>
 
-    <div id="sumLabel" class="sum-label">
-        Сумма
-    </div>
-    <input
-        id="sumInput"
-        class="sum-input"
-        type="number"
-        inputmode="numeric"
-        value="0"
-        readonly>
-</div>
-
-  <div class="modeBox">
-
-    <span class="modeText">Дата рождения</span>
-
-    <label class="switch">
-
-        <input id="modeSwitch" type="checkbox" checked>
-
-        <span class="slider"></span>
-
-    </label>
-
-</div>
-<div class="mode-box">
-    <span class="mode-text">
-        Обычный квадрат
-    </span>
-    <label class="switch">
-        <input
-            id="modeSwitch"
-            type="checkbox">
-        <span class="slider"></span>
-    </label>
-    <span class="mode-text">
-        Дата рождения
-    </span>
-</div>
   <button id="clearBtn">Очистить</button>
+
   <button id="imageBtn">Картинка</button>
+
   <img id="preview" alt="Квадрат" hidden>
+
 </div>
 
-<script src="./app.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
