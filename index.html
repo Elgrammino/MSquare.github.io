@@ -30,9 +30,18 @@ content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=
   </div>
 
   <div class="sum-box">
-    <div class="sum-label">Сумма</div>
-    <div id="sum" class="sum-value">0</div>
-  </div>
+
+    <div id="sumLabel" class="sum-label">
+        Сумма
+    </div>
+    <input
+        id="sumInput"
+        class="sum-input"
+        type="number"
+        inputmode="numeric"
+        value="0"
+        readonly>
+</div>
 
   <div class="modeBox">
 
@@ -47,13 +56,23 @@ content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=
     </label>
 
 </div>
-
+<div class="mode-box">
+    <span class="mode-text">
+        Обычный квадрат
+    </span>
+    <label class="switch">
+        <input
+            id="modeSwitch"
+            type="checkbox">
+        <span class="slider"></span>
+    </label>
+    <span class="mode-text">
+        Дата рождения
+    </span>
+</div>
   <button id="clearBtn">Очистить</button>
-
   <button id="imageBtn">Картинка</button>
-
   <img id="preview" alt="Квадрат" hidden>
-
 </div>
 
 <script src="./app.js"></script>
