@@ -275,3 +275,110 @@ button:active {
     transform:translateX(24px);
 
 }
+/* ---------- SUM INPUT ---------- */
+
+.sum-input{
+
+    width:120px;
+
+    background:transparent;
+
+    border:none;
+
+    outline:none;
+
+    color:white;
+
+    font-size:44px;
+
+    font-weight:700;
+
+    text-align:center;
+
+    margin-top:8px;
+}
+
+.sum-input:read-only{
+
+    cursor:default;
+}
+
+/* ---------- SWITCH ---------- */
+
+.mode-box{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:14px;
+
+    margin-top:26px;
+}
+
+.mode-text{
+
+    font-size:15px;
+
+    color:#8e8e93;
+}
+
+.switch{
+
+    position:relative;
+
+    width:56px;
+
+    height:30px;
+}
+
+.switch input{
+
+    display:none;
+}
+
+.slider{
+
+    position:absolute;
+
+    inset:0;
+
+    background:#3a3a3c;
+
+    border-radius:30px;
+
+    transition:.25s;
+}
+
+.slider::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:24px;
+
+    height:24px;
+
+    left:3px;
+
+    top:3px;
+
+    border-radius:50%;
+
+    background:white;
+
+    transition:.25s;
+}
+
+.switch input:checked + .slider{
+
+    background:#34C759;
+}
+
+.switch input:checked + .slider::before{
+
+    transform:translateX(26px);
+}
