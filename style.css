@@ -1,124 +1,202 @@
+/* ============================================================
+   TOKENS
+   ============================================================ */
+
+:root {
+  /* primitive */
+  --black: #000000;
+  --white: #ffffff;
+  --gray-900: #1c1c1e;
+  --gray-800: #2c2c2e;
+  --gray-700: #3a3a3c;
+  --gray-400: #8e8e93;
+  --green-500: #30d158;
+
+  /* semantic */
+  --color-bg: var(--black);
+  --color-surface: rgba(28, 28, 30, .6);
+  --color-surface-raised: var(--gray-800);
+  --color-fg: var(--white);
+  --color-muted: var(--gray-400);
+  --color-border: rgba(255, 255, 255, .08);
+  --color-accent: var(--green-500);
+  --color-on-accent: var(--black);
+  --color-accent-soft: rgba(48, 209, 88, .14);
+  --color-accent-line: rgba(48, 209, 88, .45);
+
+  /* spacing (4pt scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* radius */
+  --radius-cell: 22px;
+  --radius-card: 34px;
+  --radius-pill: 999px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.22, .8, .36, 1);
+  --dur-fast: 120ms;
+  --dur-base: 220ms;
+
+  /* layout: ячейка подстраивается и под ширину, и под высоту экрана */
+  --grid-gap: 10px;
+  --card-pad: 18px;
+  --cell: clamp(
+    52px,
+    min(
+      calc((100vw - 2 * var(--space-4) - 2 * var(--card-pad) - 3 * var(--grid-gap)) / 4),
+      calc((100svh - 440px) / 4)
+    ),
+    84px
+  );
+
+  --font-ui:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  background: var(--color-bg);
+}
+
 body {
   margin: 0;
-  background: #000;
-  color: #fff;
+  background: var(--color-bg);
+  color: var(--color-fg);
 
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    sans-serif;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
 .app {
   min-height: 100vh;
+  min-height: 100dvh;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
   padding:
-    max(24px, env(safe-area-inset-top))
-    16px
-    60px;
+    max(var(--space-6), env(safe-area-inset-top))
+    max(var(--space-4), env(safe-area-inset-right))
+    max(60px, env(safe-area-inset-bottom))
+    max(var(--space-4), env(safe-area-inset-left));
 }
 
-.mode-switch {
+/* ============================================================
+   MODE SWITCH (segmented control)
+   ============================================================ */
+
+.segmented {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  width: min(100%, 320px);
+  padding: 3px;
+  margin-bottom: var(--space-6);
+
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-pill);
+}
+
+.segmented input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segmented label {
+  position: relative;
+  z-index: 1;
+
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 
-  margin-bottom: 22px;
-}
+  min-height: 36px;
+  padding: 0 var(--space-3);
 
-.mode-label {
-  color: #8e8e93;
+  color: var(--color-muted);
   font-size: 13px;
   font-weight: 600;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-
-  width: 51px;
-  height: 31px;
-
-  flex-shrink: 0;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  inset: 0;
-
-  background-color: #39393d;
-  border-radius: 34px;
+  white-space: nowrap;
 
   cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
 
-  transition: background-color .2s ease;
+  transition: color var(--dur-base) var(--ease-out);
 }
 
-.slider::before {
-  content: "";
+.segmented input:checked + label {
+  color: var(--color-fg);
+}
 
+.segmented input:focus-visible + label {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-pill);
+}
+
+.segmented-thumb {
   position: absolute;
-  left: 2px;
-  bottom: 2px;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
 
-  width: 27px;
-  height: 27px;
+  width: calc(50% - 3px);
 
-  background: #fff;
-  border-radius: 50%;
+  background: var(--gray-700);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
 
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-
-  transition: transform .2s ease;
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
-.switch input:checked + .slider {
-  background-color: #34C759;
+#modeDate:checked ~ .segmented-thumb {
+  transform: translateX(100%);
 }
 
-.switch input:checked + .slider::before {
-  transform: translateX(20px);
-}
+/* ============================================================
+   CARD + GRID
+   ============================================================ */
 
 .card {
   position: relative;
 
-  padding: 26px;
-  border-radius: 36px;
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
 
-  background:
-    rgba(28, 28, 30, .55);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 
-  border:
-    1px solid rgba(255,255,255,.08);
-
-  backdrop-filter:
-    blur(18px)
-    saturate(150%);
-
-  -webkit-backdrop-filter:
-    blur(18px)
-    saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
 
   box-shadow:
-    0 20px 50px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.12);
+    0 20px 50px rgba(0, 0, 0, .45),
+    inset 0 1px 0 rgba(255, 255, 255, .1);
 }
 
 .card::before {
@@ -129,12 +207,7 @@ body {
 
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,.10),
-      rgba(255,255,255,0)
-    );
+  background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, 0) 40%);
 
   pointer-events: none;
 }
@@ -143,40 +216,13 @@ body {
   position: relative;
 
   display: grid;
-  grid-template-columns:
-    repeat(4, 82px);
-
-  gap: 12px;
-}
-
-.hint {
-  margin-top: 18px;
-
-  min-height: 18px;
-
-  text-align: center;
-
-  padding: 0 12px;
-
-  color: #8e8e93;
-  font-size: 14px;
-  line-height: 1.3;
-
-  transition: opacity .2s ease;
-}
-
-.hint.hidden {
-  opacity: 0;
+  grid-template-columns: repeat(4, var(--cell));
+  gap: var(--grid-gap);
 }
 
 .cell {
-  width: 82px;
-  height: 82px;
-
-  background:
-    rgba(44,44,46,.9);
-
-  border-radius: 24px;
+  width: var(--cell);
+  height: var(--cell);
 
   display: flex;
   justify-content: center;
@@ -185,151 +231,224 @@ body {
   position: relative;
   overflow: hidden;
 
-  font-size: 34px;
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-cell);
+
+  font-size: calc(var(--cell) * .4);
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
-input {
+/* нижний ряд — поля ввода даты */
+.cell-input {
+  cursor: text;
+}
+
+.app[data-mode="date"] .cell-input {
+  background: var(--color-accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent-line);
+}
+
+.app[data-mode="date"] .cell-input:focus-within {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+.cell input {
   width: 100%;
   height: 100%;
+  padding: 0;
 
   border: none;
   outline: none;
   background: transparent;
 
-  color: #fff;
+  color: var(--color-fg);
+  caret-color: var(--color-accent);
 
   text-align: center;
 
-  font-size: 34px;
-  font-weight: 600;
+  font: inherit;
+  touch-action: manipulation;
+}
+
+/* в режиме «обычный квадрат» поля заблокированы — выглядят как обычные ячейки */
+.cell input:disabled {
+  opacity: 1;
+  color: var(--color-fg);
+  -webkit-text-fill-color: var(--color-fg);
+  cursor: default;
+}
+
+/* ============================================================
+   HINT + SUM
+   ============================================================ */
+
+.hint {
+  margin: var(--space-4) 0 0;
+  min-height: 18px;
+  padding: 0 var(--space-3);
+
+  text-align: center;
+
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.3;
+
+  transition: opacity var(--dur-base) ease;
+}
+
+.hint.hidden {
+  opacity: 0;
 }
 
 .sum-box {
-  margin-top: 26px;
+  margin-top: var(--space-5);
   text-align: center;
 }
 
 .sum-label {
-  color: #8e8e93;
-  font-size: 15px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
 }
 
 .sum-value {
-  margin-top: 8px;
-  font-size: 44px;
+  margin-top: var(--space-2);
+
+  font-size: 48px;
   font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .sum-value.editable {
   display: inline-block;
-  min-width: 150px;
+  min-width: 160px;
+  min-height: 70px;
 
-  padding: 6px 22px;
+  padding: var(--space-2) var(--space-6);
 
-  background: rgba(44,44,46,.9);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 24px;
+  background: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-cell);
 
   outline: none;
+  caret-color: var(--color-accent);
+  cursor: text;
+
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
 .sum-value.editable:focus {
-  border-color: #34C759;
+  border-color: var(--color-accent);
 }
 
-button {
-  width: 210px;
-  height: 56px;
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+
+  width: min(100%, 360px);
+  margin-top: var(--space-6);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  height: 54px;
+  padding: 0 var(--space-4);
 
   border: none;
-  border-radius: 28px;
+  border-radius: var(--radius-pill);
 
-  background: #34C759;
-  color: #fff;
-
+  font: inherit;
   font-size: 17px;
   font-weight: 600;
 
-  margin-top: 18px;
-
-  box-shadow:
-    0 10px 30px rgba(52,199,89,.25);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
 
   transition:
-    transform .12s ease,
-    filter .12s ease;
+    transform var(--dur-fast) ease,
+    filter var(--dur-fast) ease;
 }
 
-button:active {
+.btn:active {
   transform: scale(.96);
-  filter: brightness(.92);
+  filter: brightness(.9);
 }
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: 0 10px 30px rgba(48, 209, 88, .22);
+}
+
+.btn-secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-fg);
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   PREVIEW
+   (намеренно далеко внизу — картинку не видно, пока не прокрутишь)
+   ============================================================ */
 
 #preview {
+  display: block;
   width: min(92vw, 430px);
 
-  margin-top:
-    max(420px, 60vh);
+  margin-top: max(420px, 60vh);
 
-  border-radius: 24px;
-  background: #fff;
+  border-radius: var(--space-6);
+  background: var(--white);
 }
 
-.digit {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  transform:
-    translate(-50%, -50%);
-
-  transition:
-    transform .25s cubic-bezier(.22,.8,.36,1),
-    opacity .25s ease;
+#preview[hidden] {
+  display: none;
 }
 
-.old {
-  opacity: 1;
-}
+/* ============================================================
+   MOTION
+   ============================================================ */
 
-.next {
-  opacity: 0;
-  transform:
-    translate(-50%, -180%);
-}
-
-.old.hide {
-  opacity: 0;
-  transform:
-    translate(-50%, 180%);
-}
-
-.next.show {
-  opacity: 1;
-  transform:
-    translate(-50%, -50%);
-}
-
-@media (max-height: 760px) {
-
-  .grid {
-    grid-template-columns:
-      repeat(4, 74px);
-  }
-
-  .cell {
-    width: 74px;
-    height: 74px;
-    font-size: 30px;
-  }
-
-  input {
-    font-size: 30px;
-  }
-
-  .hint {
-    font-size: 13px;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
   }
 }

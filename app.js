@@ -4,7 +4,8 @@ const sumLabelEl = document.getElementById("sumLabel");
 const preview = document.getElementById("preview");
 const imageBtn = document.getElementById("imageBtn");
 const hintEl = document.getElementById("hint");
-const modeToggle = document.getElementById("modeToggle");
+const appEl = document.getElementById("app");
+const modeRadios = document.querySelectorAll('input[name="mode"]');
 
 const cells = [];
 const inputs = [];
@@ -16,6 +17,8 @@ for (let i = 0; i < 16; i++) {
   cell.className = "cell";
 
   if (i >= 12) {
+    cell.classList.add("cell-input");
+
     const input = document.createElement("input");
 
     input.type = "text";
@@ -23,6 +26,7 @@ for (let i = 0; i < 16; i++) {
     input.maxLength = 3;
     input.autocomplete = "off";
     input.spellcheck = false;
+    input.setAttribute("aria-label", "Число " + (i - 11));
 
     cell.appendChild(input);
 
@@ -38,9 +42,9 @@ for (let i = 0; i < 16; i++) {
 }
 
 /* ---------- MODE STATE ---------- */
-/* checked = "Дата рождения" (справа), unchecked = "Обычный квадрат" (слева) */
+/* "date" = «Дата рождения», "normal" = «Обычный квадрат» */
 
-let mode = modeToggle.checked ? "date" : "normal";
+let mode = document.querySelector('input[name="mode"]:checked').value;
 
 let savedDateValues = ["", "", "", ""];
 let normalNumberRaw = "";
@@ -81,7 +85,6 @@ function updateHint() {
 /* ---------- IOS-STYLE HAPTIC FEEL ---------- */
 
 let rafPending = false;
-let renderedOnce = false;
 
 function scheduleUpdate() {
   if (rafPending) return;
@@ -91,7 +94,6 @@ function scheduleUpdate() {
   requestAnimationFrame(() => {
     rafPending = false;
     update();
-    renderedOnce = true;
   });
 }
 
@@ -219,6 +221,7 @@ function update() {
 function setMode(newMode) {
 
   mode = newMode;
+  appEl.dataset.mode = mode;
 
   const isNormal = mode === "normal";
 
@@ -255,8 +258,10 @@ function setMode(newMode) {
 
 }
 
-modeToggle.addEventListener("change", () => {
-  setMode(modeToggle.checked ? "date" : "normal");
+modeRadios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    if (radio.checked) setMode(radio.value);
+  });
 });
 
 /* ---------- INPUTS (IOS-STYLE INPUT FLOW, режим "дата рождения") ---------- */
@@ -493,7 +498,12 @@ imageBtn.addEventListener("click", drawImage);
 
 /* ---------- START ---------- */
 
+appEl.dataset.mode = mode;
+
 requestAnimationFrame(update);
+
+// шрифт нужен только canvas, поэтому браузер сам его не скачает — грузим заранее
+document.fonts?.load("700 60px Caveat");
 
 if ("serviceWorker" in navigator) {
 

@@ -1,4 +1,4 @@
-const CACHE = "magic-square-v5";
+const CACHE = "magic-square-v6";
 
 const ASSETS = [
   "./",
