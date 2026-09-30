@@ -1,20 +1,20 @@
 {
-  "name": "Магический квадрат",
-  "short_name": "Квадрат",
-  "start_url": "/MSquare.github.io/",
-  "scope": "/MSquare.github.io/",
+  "name": "Меню",
+  "short_name": "Меню",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#15110E",
+  "theme_color": "#15110E",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/MSquare.github.io/apple-touch-icon.png",
+      "src": "apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/MSquare.github.io/apple-touch-icon.png",
+      "src": "apple-touch-icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
