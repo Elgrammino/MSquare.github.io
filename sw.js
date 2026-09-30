@@ -1,64 +1,34 @@
-// При каждом изменении index.html/картинок меняйте номер версии,
-// иначе у пользователей останется старая версия из кэша.
-const CACHE_NAME = "menu-v5";
+const CACHE = "magic-square-v6";
 
-// Пути относительные (от расположения sw.js), поэтому один и тот же
-// файл работает и в /menu.github.io/, и в /Menubeta.github.io/
 const ASSETS = [
   "./",
   "./index.html",
-  "./logo_menu.png",
-  "./apple-touch-icon.png",
-  "./manifest.json"
+  "./style.css",
+  "./app.js",
+  "./manifest.json",
+  "./apple-touch-icon.png"
 ];
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+self.addEventListener("install", e => {
+  self.skipWaiting();
+  e.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
   );
 });
 
-self.addEventListener("activate", event => {
-  event.waitUntil(
+self.addEventListener("activate", e => {
+  e.waitUntil(
     Promise.all([
       caches.keys().then(keys =>
-        Promise.all(
-          keys.map(key => {
-            if (key !== CACHE_NAME) {
-              return caches.delete(key);
-            }
-          })
-        )
+        Promise.all(keys.map(k => k !== CACHE && caches.delete(k)))
       ),
       self.clients.claim()
     ])
   );
 });
 
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(event.request)
-      .then(cached => {
-        return (
-          cached ||
-          fetch(event.request).then(response => {
-            // Кэшируем только успешные ответы (не 404/ошибки)
-            // и шрифты Google (они приходят как "opaque")
-            if (response.ok || response.type === "opaque") {
-              const copy = response.clone();
-
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(event.request, copy);
-              });
-            }
-
-            return response;
-          })
-        );
-      })
+self.addEventListener("fetch", e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
